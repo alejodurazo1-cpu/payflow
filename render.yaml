@@ -3,14 +3,14 @@ services:
     name: payflow-api
     env: node
     buildCommand: npm install && npm run build -w packages/payflow-dashboard
-    startCommand: node packages/payflow-server/dist/index.js
+    startCommand: npx tsx packages/payflow-server/src/index.ts
     envVars:
       - key: NODE_VERSION
         value: 22
       - key: PAYFLOW_MODE
         value: local
       - key: PORT
-        value: "3001"
+        value: "10000"
       - key: STRIPE_SECRET_KEY
         value: sk_test_placeholder
       - key: PAYPAL_CLIENT_ID

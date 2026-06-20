@@ -5,3 +5,9 @@ dist/
 *.log
 .DS_Store
 test-screenshot.png
+
+# Compiled artifacts in source directories (from monorepo tsc)
+packages/**/src/*.js
+packages/**/src/*.js.map
+packages/**/src/*.d.ts
+packages/**/src/*.d.ts.map
