@@ -1,0 +1,19 @@
+{
+  "name": "@payflow/sdk",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@payflow/shared": "*",
+    "stripe": "^17.0.0"
+  },
+  "devDependencies": {
+    "vitest": "^2.0.0"
+  }
+}

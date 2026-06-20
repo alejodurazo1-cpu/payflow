@@ -1,0 +1,18 @@
+{
+  "name": "payflow",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "test": "npm run test --workspaces",
+    "dev": "concurrently \"npm run dev -w packages/payflow-server\" \"npm run dev -w packages/payflow-dashboard\"",
+    "lint": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "typescript": "^5.4.0"
+  }
+}

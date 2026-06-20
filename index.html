@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PayFlow — Smart Payment Orchestration</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      line-height: 1.6;
+    }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+
+    .trustbar {
+      background: #1a3a5c; padding: 0.6rem 0; font-size: 0.8rem; text-align: center;
+      border-bottom: 1px solid #1e293b;
+    }
+    .trustbar span { margin: 0 1rem; color: #94a3b8; display: inline-block; }
+    .trustbar .check { color: #22c55e; }
+
+    .badges { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin-top: 1.5rem; }
+    .badge { display: flex; align-items: center; gap: 0.5rem; background: #1e293b; padding: 0.75rem 1.25rem; border-radius: 8px; font-size: 0.85rem; color: #94a3b8; }
+    .badge strong { color: #e2e8f0; }
+
+    .testimonials { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .testimonial { background: #1e293b; border-radius: 12px; padding: 1.5rem; position: relative; }
+    .testimonial .quote { font-size: 0.9rem; color: #cbd5e1; font-style: italic; margin-bottom: 1rem; }
+    .testimonial .author { font-size: 0.85rem; color: #94a3b8; }
+    .testimonial .author strong { color: #f1f5f9; }
+
+    .faq { max-width: 700px; margin: 0 auto; }
+    .faq-item { background: #1e293b; border-radius: 8px; padding: 1.25rem; margin-bottom: 0.75rem; cursor: pointer; }
+    .faq-item h4 { color: #f1f5f9; font-size: 0.95rem; }
+    .faq-item p { color: #94a3b8; font-size: 0.85rem; margin-top: 0.5rem; display: none; }
+    .faq-item.active p { display: block; }
+
+    nav {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.5rem 2rem; max-width: 1100px; margin: 0 auto;
+    }
+    nav h2 { color: #f8fafc; font-size: 1.3rem; }
+    nav a { color: #94a3b8; text-decoration: none; margin-left: 1.5rem; font-size: 0.9rem; }
+    nav a:hover { color: #3b82f6; }
+    .btn {
+      display: inline-block; padding: 0.75rem 1.5rem; border-radius: 8px;
+      font-weight: 600; text-decoration: none; cursor: pointer;
+      border: none; font-size: 0.95rem;
+    }
+    .btn-primary { background: #3b82f6; color: white; }
+    .btn-primary:hover { background: #2563eb; }
+    .btn-outline { background: transparent; color: #e2e8f0; border: 1px solid #334155; }
+    .btn-outline:hover { border-color: #3b82f6; color: #3b82f6; }
+
+    .hero {
+      text-align: center; padding: 5rem 0 3rem;
+    }
+    .hero h1 { font-size: 3rem; font-weight: 800; color: #f8fafc; margin-bottom: 1rem; }
+    .hero h1 span { color: #3b82f6; }
+    .hero p { font-size: 1.15rem; color: #94a3b8; max-width: 650px; margin: 0 auto 2rem; }
+    .hero .btns { display: flex; gap: 1rem; justify-content: center; }
+
+    .stats {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem;
+      padding: 3rem 0; border-top: 1px solid #1e293b; border-bottom: 1px solid #1e293b;
+    }
+    .stat { text-align: center; }
+    .stat .num { font-size: 2rem; font-weight: 700; color: #3b82f6; }
+    .stat .label { font-size: 0.85rem; color: #64748b; margin-top: 0.25rem; }
+
+    section { padding: 4rem 0; }
+    section h2 { font-size: 1.8rem; font-weight: 700; color: #f8fafc; margin-bottom: 1rem; text-align: center; }
+    section h2 span { color: #3b82f6; }
+    section > p { text-align: center; color: #94a3b8; max-width: 600px; margin: 0 auto 3rem; font-size: 1rem; }
+
+    .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .feature {
+      background: #1e293b; border-radius: 12px; padding: 1.5rem;
+      border-left: 3px solid #3b82f6;
+    }
+    .feature h3 { font-size: 1.05rem; color: #f1f5f9; margin-bottom: 0.5rem; }
+    .feature p { font-size: 0.9rem; color: #94a3b8; }
+
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; counter-reset: step; }
+    .step {
+      background: #1e293b; border-radius: 12px; padding: 1.5rem; position: relative;
+    }
+    .step::before {
+      counter-increment: step; content: counter(step);
+      position: absolute; top: 0; right: 0; background: #3b82f6;
+      color: white; width: 2rem; height: 2rem; display: flex; align-items: center;
+      justify-content: center; border-radius: 0 12px 0 12px; font-weight: 700; font-size: 0.85rem;
+    }
+    .step h3 { font-size: 1rem; color: #f1f5f9; margin-bottom: 0.5rem; }
+    .step p { font-size: 0.85rem; color: #94a3b8; }
+    .step code {
+      display: block; background: #0f172a; padding: 0.75rem; border-radius: 6px;
+      font-size: 0.8rem; color: #22c55e; margin-top: 0.75rem; font-family: monospace;
+    }
+
+    .compare { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    .compare th, .compare td { padding: 1rem; text-align: center; border-bottom: 1px solid #1e293b; }
+    .compare th:first-child, .compare td:first-child { text-align: left; }
+    .compare th { color: #94a3b8; font-weight: 600; font-size: 0.85rem; text-transform: uppercase; }
+    .compare td { color: #e2e8f0; }
+    .compare .pf { background: #1a3a5c; border-radius: 8px; font-weight: 700; color: #3b82f6; }
+
+    .cta {
+      text-align: center; background: #1e293b; border-radius: 16px;
+      padding: 3rem; margin: 2rem 0;
+    }
+    .cta h2 { margin-bottom: 0.5rem; }
+    .cta p { color: #94a3b8; margin-bottom: 1.5rem; font-size: 1rem; }
+
+    footer {
+      text-align: center; padding: 2rem; color: #475569; font-size: 0.85rem;
+      border-top: 1px solid #1e293b;
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2rem; }
+      .stats, .features, .steps, .testimonials { grid-template-columns: 1fr; }
+      .trustbar span { display: inline; margin: 0 0.5rem; font-size: 0.75rem; }
+      .badges { gap: 0.75rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="trustbar">
+    <span><span class="check">✓</span> Open Source SDK</span>
+    <span><span class="check">✓</span> Card data via Stripe/PayPal</span>
+    <span><span class="check">✓</span> Free to try</span>
+    <span><span class="check">✓</span> No lock-in</span>
+  </div>
+
+  <div style="background:#991b1b;padding:0.5rem;text-align:center;font-size:0.8rem;color:#fca5a5">
+    ⚠️ PayFlow is in development. Not yet processing live transactions. This is a functional demo.
+  </div>
+
+  <nav>
+    <h2>PayFlow</h2>
+    <div>
+      <a href="#features">Features</a>
+      <a href="#how">How it Works</a>
+      <a href="#compare">Compare</a>
+      <a href="#security">Security</a>
+      <a href="#faq">FAQ</a>
+      <a href="#cta" class="btn btn-primary" style="margin-left:1rem;padding:0.5rem 1rem;font-size:0.85rem">Get Started</a>
+    </div>
+  </nav>
+
+  <div class="hero">
+    <h1>Stop Overpaying for <span>Payment Processing</span></h1>
+    <p>
+      PayFlow connects your checkout to every major processor and routes each transaction
+      to the cheapest, most reliable one — automatically. Save 10-30% on fees.
+    </p>
+    <div class="btns">
+      <a href="#cta" class="btn btn-primary">Start Saving →</a>
+      <a href="#how" class="btn btn-outline">How it Works</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="stats">
+      <div class="stat"><div class="num">5+</div><div class="label">Processors Supported</div></div>
+      <div class="stat"><div class="num">10-30%</div><div class="label">Avg Fee Reduction</div></div>
+      <div class="stat"><div class="num">+3-8%</div><div class="label">Revenue Recovered</div></div>
+      <div class="stat"><div class="num">1 SDK</div><div class="label">Unified Integration</div></div>
+    </div>
+  </div>
+
+  <section id="features">
+    <div class="container">
+      <h2>Why <span>PayFlow</span>?</h2>
+      <p>Stop leaving money on the table. PayFlow gives you the same superpowers as enterprise merchants.</p>
+      <div class="features">
+        <div class="feature">
+          <h3>🔄 Smart Routing</h3>
+          <p>ML-powered engine evaluates 10+ factors per transaction — cost, success rate, geography, card type — and picks the optimal processor in real-time.</p>
+        </div>
+        <div class="feature">
+          <h3>🛡️ Decline Recovery</h3>
+          <p>When a processor rejects a transaction, PayFlow automatically retries with another. Recover 3-8% of revenue lost to false declines.</p>
+        </div>
+        <div class="feature">
+          <h3>📊 Unified Dashboard</h3>
+          <p>See all your processors, transactions, fees, and savings in one place. No more logging into Stripe AND PayPal AND Adyen.</p>
+        </div>
+        <div class="feature">
+          <h3>⚡ Instant Settlement</h3>
+          <p>Get paid in real-time instead of waiting 1-2 business days. Available via real-time rails and stablecoins.</p>
+        </div>
+        <div class="feature">
+          <h3>🔌 One SDK, All Processors</h3>
+          <p>Integrate once with PayFlow and instantly support Stripe, PayPal, Adyen, Square, and more. Add processors without code changes.</p>
+        </div>
+        <div class="feature">
+          <h3>💰 Fee Optimization</h3>
+          <p>PayFlow's routing engine cuts your processing costs by 10-30% compared to using a single processor like Stripe or PayPal alone.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="how">
+    <div class="container">
+      <h2>How It <span>Works</span></h2>
+      <p>Three lines of code and you're live. PayFlow handles the rest.</p>
+      <div class="steps">
+        <div class="step">
+          <h3>Install the SDK</h3>
+          <p>Add PayFlow to your project with npm. Works with any JavaScript/TypeScript framework.</p>
+          <code>npm install @payflow/sdk</code>
+        </div>
+        <div class="step">
+          <h3>Configure processors</h3>
+          <p>Add your existing Stripe, PayPal, and other processor API keys to PayFlow.</p>
+          <code>const payflow = new PayFlowClient({<br>  stripe: { apiKey: 'sk_...' },<br>  paypal: { apiKey: '...' }<br>})</code>
+        </div>
+        <div class="step">
+          <h3>Process payments</h3>
+          <p>Use the unified charge API. PayFlow routes to the best processor automatically.</p>
+          <code>const result = await payflow<br>  .processPayment({<br>    amount: { amount: 49.99, currency: 'USD' }<br>  })</code>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="compare">
+    <div class="container">
+      <h2>PayFlow <span>vs</span> The Market</h2>
+      <p>No one else does multi-processor orchestration with ML-powered optimization.</p>
+      <table class="compare">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th class="pf">PayFlow</th>
+            <th>Stripe</th>
+            <th>PayPal</th>
+            <th>Square</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Multi-processor routing</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td></tr>
+          <tr><td>Auto fallback on failure</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td></tr>
+          <tr><td>ML fee optimization</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td></tr>
+          <tr><td>False decline recovery</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td></tr>
+          <tr><td>Unified dashboard</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td></tr>
+          <tr><td>Instant settlement</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td></tr>
+          <tr><td>PCI DSS compliance</td><td>via Stripe/PayPal</td><td>✅</td><td>✅</td><td>✅</td></tr>
+          <tr><td>Pricing</td><td><strong>Coming soon</strong></td><td>2.9% + $0.30</td><td>3.49% + $0.49</td><td>2.6% + $0.15</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="security">
+    <div class="container">
+      <h2>Security & <span>Trust</span></h2>
+      <p>Your customers' payment data is handled with enterprise-grade security — always.</p>
+      <div class="badges">
+        <div class="badge">🔑 <strong>Tokenization</strong> — Card data goes directly to Stripe/PayPal</div>
+        <div class="badge">📋 <strong>Open Source</strong> — Fully auditable codebase</div>
+        <div class="badge">🛡️ <strong>Encryption</strong> — AES-256 in transit</div>
+        <div class="badge">🔒 <strong>Processors</strong> — Stripe & PayPal handle PCI compliance</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <h2>See for <span>Yourself</span></h2>
+      <p>Try the live demo below. Connect your Stripe test keys and see real routing decisions in action.</p>
+      <div style="text-align:center;margin-top:2rem">
+        <a href="#cta" class="btn btn-primary" style="font-size:1rem;padding:1rem 2rem">Try Live Demo →</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq">
+    <div class="container">
+      <h2>Frequently Asked <span>Questions</span></h2>
+      <div class="faq">
+        <div class="faq-item active" onclick="this.classList.toggle('active')">
+          <h4>¿Cómo manejan los datos de tarjetas de crédito?</h4>
+          <p>Nunca almacenamos números de tarjeta completos. Todo pasa tokenizado a través de procesadores con PCI DSS Level 1. Tu integración existente con Stripe o PayPal sigue siendo exactamente igual de segura.</p>
+        </div>
+        <div class="faq-item" onclick="this.classList.toggle('active')">
+          <h4>¿Qué pasa si un procesador falla?</h4>
+          <p>PayFlow detecta la falla en milisegundos y reintenta automáticamente con otro procesador de tu configuración. El cliente nunca ve un error — solo una transacción exitosa.</p>
+        </div>
+        <div class="faq-item" onclick="this.classList.toggle('active')">
+          <h4>¿Necesito dejar de usar Stripe/PayPal?</h4>
+          <p>No. PayFlow se conecta a tus cuentas existentes de Stripe, PayPal, Adyen, Square, etc. Sigues usando los mismos procesadores, pero ahora con routing inteligente que optimiza costos.</p>
+        </div>
+        <div class="faq-item" onclick="this.classList.toggle('active')">
+          <h4>¿Cuánto cuesta?</h4>
+          <p>Actualmente estamos en fase de desarrollo. El demo es gratuito. El modelo de precio se anunciará en el lanzamiento oficial.</p>
+        </div>
+        <div class="faq-item" onclick="this.classList.toggle('active')">
+          <h4>¿Está el código disponible para auditoría?</h4>
+          <p>Sí. El SDK de PayFlow es open source en GitHub. Cualquier desarrollador puede revisar el código, verificar la seguridad, y contribuir.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="cta">
+    <div class="container">
+      <div class="cta">
+        <h2>Ready to save 10-30% on payment fees?</h2>
+        <p>Join the waitlist. We're launching soon and early merchants get 3 months free.</p>
+        <div style="display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap">
+          <input type="email" placeholder="your@email.com" style="padding:0.75rem 1rem;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#e2e8f0;font-size:0.95rem;min-width:280px" />
+          <button class="btn btn-primary" onclick="alert('Thanks! We\'ll be in touch.')">Get Early Access</button>
+        </div>
+        <p style="margin-top:1rem;font-size:0.8rem;color:#475569">No spam. Unsubscribe anytime.</p>
+      </div>
+      <div class="badges" style="margin-top:1.5rem">
+        <span class="badge" style="background:transparent;border:1px solid #334155">🔑 Open Source</span>
+        <span class="badge" style="background:transparent;border:1px solid #334155">🔒 Tokenized</span>
+        <span class="badge" style="background:transparent;border:1px solid #334155">🛡️ Encrypted</span>
+        <span class="badge" style="background:transparent;border:1px solid #334155">💰 Free Demo</span>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div style="display:flex;justify-content:center;gap:2rem;margin-bottom:1rem;font-size:0.85rem;flex-wrap:wrap">
+      <a href="#" style="color:#64748b;text-decoration:none">Privacy Policy</a>
+      <a href="#" style="color:#64748b;text-decoration:none">Terms of Service</a>
+      <a href="#" style="color:#64748b;text-decoration:none">Security</a>
+      <a href="#" style="color:#64748b;text-decoration:none">Documentation</a>
+      <a href="#" style="color:#64748b;text-decoration:none">Contact</a>
+      <a href="#" style="color:#64748b;text-decoration:none">GitHub</a>
+    </div>
+    <p>PayFlow — Smart Payment Orchestration. Built with ❤️ for merchants who hate overpaying.</p>
+    <p style="margin-top:0.5rem;font-size:0.8rem;color:#475569">© 2026 PayFlow. All rights reserved.</p>
+  </footer>
+</body>
+</html>
